@@ -70,14 +70,14 @@ button {
   z-index: 40;
   font-size: 18px;
   color: #ff4d6d;
-  animation: float 5s ease forwards;
+  animation: float 5.5s ease forwards;
   pointer-events: none;
 }
 
 @keyframes float {
   0% { opacity: 0; transform: translateY(20px); }
   20% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-120px); }
+  100% { opacity: 0; transform: translateY(-140px); }
 }
 </style>
 </head>
@@ -129,14 +129,33 @@ document.addEventListener("mousemove", (e) => {
   }
 });
 
-// 💕 Love text generator (ONLY after YES)
+// 💕 LOTS of cute messages
 const lines = [
   "You are my forever ❤️",
   "I choose you. Always 💘",
   "Distance means nothing 🌍",
   "My heart found its home 💓",
   "You & Me ♾️",
-  "Every heartbeat is you 🤍"
+  "Every heartbeat is you 🤍",
+  "Still falling for you 😌",
+  "You are my safest place 🫶",
+  "With you, everything feels right ✨",
+  "My favorite love story is us 💕",
+  "I’d pick you in every lifetime ♾️",
+  "My soul smiles because of you 🌸",
+  "You’re my today and all my tomorrows 💖",
+  "Love looks like you 🥹",
+  "You’re my calm and my chaos 💫",
+  "No matter the distance, it’s always you 💌",
+  "I found my home in you 🏡❤️",
+  "You make my heart so soft 🥰",
+  "I still get butterflies 🦋",
+  "Forever starts with you 💍",
+  "You are my happy place 🌷",
+  "Loving you is easy 💗",
+  "I’d wait a thousand years for you ⏳",
+  "You’re worth every mile 🌍❤️",
+  "Always you. Only you. 💘"
 ];
 
 function startLoveRain() {
@@ -147,8 +166,8 @@ function startLoveRain() {
     t.style.left = Math.random() * 80 + 10 + "%";
     t.style.top = Math.random() * 80 + 10 + "%";
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 5000);
-  }, 1800);
+    setTimeout(() => t.remove(), 5500);
+  }, 1400);
 }
 
 // YES click = EVERYTHING starts
