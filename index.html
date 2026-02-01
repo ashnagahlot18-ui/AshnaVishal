@@ -96,25 +96,28 @@ Will you be my Valentine?
   <button id="no">NO 🙄</button>
 </div>
 
-<!-- Background music -->
-<audio autoplay loop>
-  <source src="https://raw.githubusercontent.com/ashnagahlot18-ui/AshnaVishal/main/thousand-years.mp3" type="audio/mpeg">
-</audio>
-
 <script>
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
+// PLAY AUDIO AFTER FIRST CLICK (works in modern browsers)
+let audio = new Audio('https://raw.githubusercontent.com/ashnagahlot18-ui/AshnaVishal/main/thousand-years.mp3');
+audio.loop = true;
+document.addEventListener('click', function startAudio() {
+    audio.play();
+    document.removeEventListener('click', startAudio);
+});
 
-// NO button: dynamically moves away from cursor, stays inside screen
+// NO BUTTON: avoids cursor dynamically, stays on screen
+const noBtn = document.getElementById("no");
 document.addEventListener("mousemove", (e) => {
     const btnRect = noBtn.getBoundingClientRect();
     const dx = e.clientX - (btnRect.left + btnRect.width / 2);
     const dy = e.clientY - (btnRect.top + btnRect.height / 2);
+    const distance = Math.sqrt(dx*dx + dy*dy);
 
-    if (Math.abs(dx) < 80 && Math.abs(dy) < 80) {
-        let newX = btnRect.left - dx;
-        let newY = btnRect.top - dy;
+    if(distance < 100) { // triggers when cursor is close
+        let newX = btnRect.left - dx / 1.5;
+        let newY = btnRect.top - dy / 1.5;
 
+        // keep inside viewport
         newX = Math.max(0, Math.min(window.innerWidth - btnRect.width, newX));
         newY = Math.max(0, Math.min(window.innerHeight - btnRect.height, newY));
 
@@ -124,7 +127,8 @@ document.addEventListener("mousemove", (e) => {
     }
 });
 
-// YES button click
+// YES BUTTON CLICK
+const yesBtn = document.getElementById("yes");
 yesBtn.addEventListener("click", () => {
   document.body.innerHTML = `
     <h1>YAYYY 🥹💘</h1>
@@ -150,11 +154,11 @@ yesBtn.addEventListener("click", () => {
     setTimeout(() => heart.remove(), 1000);
   }
 
-  // Show "I Will Always Love You" popup after YES
+  // Show "I Will Always Love You" popup AFTER YES
   setTimeout(() => alert("I Will Always Love You ❤️"), 1000);
 });
 
-// Floating hearts in background
+// Floating hearts background
 function createHeart() {
   const heart = document.createElement("div");
   heart.classList.add("heart");
