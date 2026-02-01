@@ -9,7 +9,7 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: Arial, sans-serif;
   background: linear-gradient(to bottom, #ffe6f0, #ffd1dc);
   display: flex;
   flex-direction: column;
@@ -53,7 +53,7 @@ button {
   background: rgba(0,0,0,0.6);
   align-items: center;
   justify-content: center;
-  z-index: 20;
+  z-index: 50;
 }
 
 #popup div {
@@ -64,17 +64,17 @@ button {
   color: #c9184a;
 }
 
-/* ❤️ FIXED floating text */
-.floating-text {
+/* 💕 floating love text */
+.love {
   position: fixed;
-  z-index: 15;
+  z-index: 40;
   font-size: 18px;
   color: #ff4d6d;
+  animation: float 5s ease forwards;
   pointer-events: none;
-  animation: floatUp 6s ease forwards;
 }
 
-@keyframes floatUp {
+@keyframes float {
   0% { opacity: 0; transform: translateY(20px); }
   20% { opacity: 1; }
   100% { opacity: 0; transform: translateY(-120px); }
@@ -112,59 +112,53 @@ noBtn.style.top = "65%";
 
 // NO button dodges cursor
 document.addEventListener("mousemove", (e) => {
-  const rect = noBtn.getBoundingClientRect();
-  const dx = e.clientX - (rect.left + rect.width / 2);
-  const dy = e.clientY - (rect.top + rect.height / 2);
-  const dist = Math.sqrt(dx*dx + dy*dy);
+  const r = noBtn.getBoundingClientRect();
+  const dx = e.clientX - (r.left + r.width / 2);
+  const dy = e.clientY - (r.top + r.height / 2);
+  const d = Math.sqrt(dx*dx + dy*dy);
 
-  if (dist < 120) {
-    let x = rect.left - dx * 0.4;
-    let y = rect.top - dy * 0.4;
+  if (d < 120) {
+    let x = r.left - dx * 0.4;
+    let y = r.top - dy * 0.4;
 
-    x = Math.max(10, Math.min(window.innerWidth - rect.width - 10, x));
-    y = Math.max(10, Math.min(window.innerHeight - rect.height - 10, y));
+    x = Math.max(10, Math.min(window.innerWidth - r.width - 10, x));
+    y = Math.max(10, Math.min(window.innerHeight - r.height - 10, y));
 
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
   }
 });
 
-// Romantic texts (start after first interaction)
-const messages = [
+// 💕 Love text generator (ONLY after YES)
+const lines = [
   "You are my forever ❤️",
-  "Every heartbeat says your name 💓",
-  "Distance means nothing with you 🌍",
   "I choose you. Always 💘",
-  "My safe place is you 🤍",
-  "You & Me ♾️"
+  "Distance means nothing 🌍",
+  "My heart found its home 💓",
+  "You & Me ♾️",
+  "Every heartbeat is you 🤍"
 ];
 
-let started = false;
-function startRomance() {
-  if (started) return;
-  started = true;
-
+function startLoveRain() {
   setInterval(() => {
     const t = document.createElement("div");
-    t.className = "floating-text";
-    t.innerText = messages[Math.floor(Math.random() * messages.length)];
+    t.className = "love";
+    t.innerText = lines[Math.floor(Math.random() * lines.length)];
     t.style.left = Math.random() * 80 + 10 + "%";
     t.style.top = Math.random() * 80 + 10 + "%";
     document.body.appendChild(t);
-
-    setTimeout(() => t.remove(), 6000);
-  }, 2200);
+    setTimeout(() => t.remove(), 5000);
+  }, 1800);
 }
 
-document.addEventListener("click", startRomance);
-document.addEventListener("mousemove", startRomance);
-
-// YES → song + popup
+// YES click = EVERYTHING starts
 yesBtn.addEventListener("click", async () => {
   try { await song.play(); } catch(e){}
   popup.style.display = "flex";
+  startLoveRain();
 });
 </script>
 
 </body>
 </html>
+
