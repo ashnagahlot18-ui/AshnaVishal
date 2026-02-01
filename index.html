@@ -9,7 +9,7 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(to bottom, #ffe6f0, #ffd1dc);
   display: flex;
   flex-direction: column;
@@ -25,6 +25,7 @@ img {
   width: 260px;
   border-radius: 15px;
   margin: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
 
 button {
@@ -38,6 +39,7 @@ button {
 #yes {
   background: #ff4d6d;
   color: white;
+  margin-right: 20px;
 }
 
 #no {
@@ -53,6 +55,7 @@ button {
   background: rgba(0,0,0,0.6);
   align-items: center;
   justify-content: center;
+  z-index: 5;
 }
 
 #popup div {
@@ -61,6 +64,22 @@ button {
   border-radius: 20px;
   font-size: 22px;
   color: #c9184a;
+}
+
+/* floating romantic text */
+.floating-text {
+  position: fixed;
+  font-size: 18px;
+  color: #ff4d6d;
+  animation: floatUp 6s ease-in-out forwards;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-120px); opacity: 0; }
 }
 </style>
 </head>
@@ -72,8 +91,10 @@ button {
 
 <img src="IMG_3028.jpeg" alt="Us ❤️">
 
-<button id="yes">YES 💘</button>
-<button id="no">NO 😜</button>
+<div>
+  <button id="yes">YES 💘</button>
+  <button id="no">NO 😜</button>
+</div>
 
 <div id="popup">
   <div>I will always love you ❤️</div>
@@ -89,7 +110,7 @@ const yesBtn = document.getElementById("yes");
 const popup = document.getElementById("popup");
 const song = document.getElementById("song");
 
-// Initial NO position
+// initial NO position
 noBtn.style.left = "60%";
 noBtn.style.top = "65%";
 
@@ -116,12 +137,32 @@ document.addEventListener("mousemove", (e) => {
 yesBtn.addEventListener("click", async () => {
   try {
     await song.play();
-  } catch (e) {
-    alert("Song failed to play 😭 Check mp3 name");
-  }
+  } catch (e) {}
   popup.style.display = "flex";
 });
+
+// Romantic floating texts
+const messages = [
+  "You are my forever ❤️",
+  "Every heartbeat says your name 💓",
+  "Distance means nothing with you 🌍",
+  "My safe place is you 🤍",
+  "I choose you. Always 💘",
+  "You & Me. Always ♾️"
+];
+
+setInterval(() => {
+  const text = document.createElement("div");
+  text.className = "floating-text";
+  text.innerText = messages[Math.floor(Math.random() * messages.length)];
+  text.style.left = Math.random() * 80 + 10 + "%";
+  text.style.top = Math.random() * 80 + 10 + "%";
+  document.body.appendChild(text);
+
+  setTimeout(() => text.remove(), 6000);
+}, 2500);
 </script>
 
 </body>
 </html>
+
