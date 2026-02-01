@@ -9,7 +9,7 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: Arial, sans-serif;
   background: linear-gradient(to bottom, #ffe6f0, #ffd1dc);
   display: flex;
   flex-direction: column;
@@ -19,19 +19,12 @@ body {
 }
 
 h1 { color: #c9184a; }
-p { color: #6a040f; max-width: 320px; }
+p { color: #6a040f; }
 
 img {
-  width: 280px;
+  width: 260px;
   border-radius: 15px;
   margin: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.buttons {
-  position: relative;
-  width: 300px;
-  height: 120px;
 }
 
 button {
@@ -40,21 +33,17 @@ button {
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  position: absolute;
 }
 
 #yes {
   background: #ff4d6d;
   color: white;
-  left: 40px;
-  top: 40px;
 }
 
 #no {
   background: #adb5bd;
   color: black;
-  left: 160px;
-  top: 40px;
+  position: fixed;
 }
 
 #popup {
@@ -79,20 +68,18 @@ button {
 <body>
 
 <h1>Hey Vishal 💖</h1>
-<p>From all my heart… will you be my Valentine?</p>
+<p>Will you be my Valentine?</p>
 
 <img src="IMG_3028.jpeg" alt="Us ❤️">
 
-<div class="buttons">
-  <button id="yes">YES 💘</button>
-  <button id="no">NO 😜</button>
-</div>
+<button id="yes">YES 💘</button>
+<button id="no">NO 😜</button>
 
 <div id="popup">
   <div>I will always love you ❤️</div>
 </div>
 
-<audio id="song" loop>
+<audio id="song">
   <source src="thousand-years.mp3" type="audio/mpeg">
 </audio>
 
@@ -102,38 +89,39 @@ const yesBtn = document.getElementById("yes");
 const popup = document.getElementById("popup");
 const song = document.getElementById("song");
 
-// NO button runs away from cursor but stays on screen
+// Initial NO position
+noBtn.style.left = "60%";
+noBtn.style.top = "65%";
+
+// NO button avoids cursor smoothly
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
+  const dx = e.clientX - (rect.left + rect.width / 2);
+  const dy = e.clientY - (rect.top + rect.height / 2);
+  const dist = Math.sqrt(dx*dx + dy*dy);
 
-  const dx = e.clientX - cx;
-  const dy = e.clientY - cy;
-  const distance = Math.sqrt(dx*dx + dy*dy);
+  if (dist < 120) {
+    let x = rect.left - dx * 0.4;
+    let y = rect.top - dy * 0.4;
 
-  if (distance < 90) {
-    let newX = rect.left - dx * 0.7;
-    let newY = rect.top - dy * 0.7;
+    x = Math.max(10, Math.min(window.innerWidth - rect.width - 10, x));
+    y = Math.max(10, Math.min(window.innerHeight - rect.height - 10, y));
 
-    const maxX = window.innerWidth - rect.width;
-    const maxY = window.innerHeight - rect.height;
-
-    newX = Math.max(0, Math.min(maxX, newX));
-    newY = Math.max(0, Math.min(maxY, newY));
-
-    noBtn.style.left = newX + "px";
-    noBtn.style.top = newY + "px";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
   }
 });
 
-// YES click = play song + popup
-yesBtn.addEventListener("click", () => {
-  song.play();
+// YES click → play song + popup
+yesBtn.addEventListener("click", async () => {
+  try {
+    await song.play();
+  } catch (e) {
+    alert("Song failed to play 😭 Check mp3 name");
+  }
   popup.style.display = "flex";
 });
 </script>
 
 </body>
 </html>
-
