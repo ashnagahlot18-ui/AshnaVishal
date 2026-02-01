@@ -25,7 +25,6 @@ img {
   width: 260px;
   border-radius: 15px;
   margin: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
 
 button {
@@ -39,7 +38,6 @@ button {
 #yes {
   background: #ff4d6d;
   color: white;
-  margin-right: 20px;
 }
 
 #no {
@@ -55,7 +53,7 @@ button {
   background: rgba(0,0,0,0.6);
   align-items: center;
   justify-content: center;
-  z-index: 5;
+  z-index: 20;
 }
 
 #popup div {
@@ -66,20 +64,20 @@ button {
   color: #c9184a;
 }
 
-/* floating romantic text */
+/* ❤️ FIXED floating text */
 .floating-text {
   position: fixed;
+  z-index: 15;
   font-size: 18px;
   color: #ff4d6d;
-  animation: floatUp 6s ease-in-out forwards;
   pointer-events: none;
-  opacity: 0.9;
+  animation: floatUp 6s ease forwards;
 }
 
 @keyframes floatUp {
-  0% { transform: translateY(20px); opacity: 0; }
+  0% { opacity: 0; transform: translateY(20px); }
   20% { opacity: 1; }
-  100% { transform: translateY(-120px); opacity: 0; }
+  100% { opacity: 0; transform: translateY(-120px); }
 }
 </style>
 </head>
@@ -91,10 +89,8 @@ button {
 
 <img src="IMG_3028.jpeg" alt="Us ❤️">
 
-<div>
-  <button id="yes">YES 💘</button>
-  <button id="no">NO 😜</button>
-</div>
+<button id="yes">YES 💘</button>
+<button id="no">NO 😜</button>
 
 <div id="popup">
   <div>I will always love you ❤️</div>
@@ -110,11 +106,11 @@ const yesBtn = document.getElementById("yes");
 const popup = document.getElementById("popup");
 const song = document.getElementById("song");
 
-// initial NO position
+// Initial NO position
 noBtn.style.left = "60%";
 noBtn.style.top = "65%";
 
-// NO button avoids cursor smoothly
+// NO button dodges cursor
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
   const dx = e.clientX - (rect.left + rect.width / 2);
@@ -133,36 +129,42 @@ document.addEventListener("mousemove", (e) => {
   }
 });
 
-// YES click → play song + popup
-yesBtn.addEventListener("click", async () => {
-  try {
-    await song.play();
-  } catch (e) {}
-  popup.style.display = "flex";
-});
-
-// Romantic floating texts
+// Romantic texts (start after first interaction)
 const messages = [
   "You are my forever ❤️",
   "Every heartbeat says your name 💓",
   "Distance means nothing with you 🌍",
-  "My safe place is you 🤍",
   "I choose you. Always 💘",
-  "You & Me. Always ♾️"
+  "My safe place is you 🤍",
+  "You & Me ♾️"
 ];
 
-setInterval(() => {
-  const text = document.createElement("div");
-  text.className = "floating-text";
-  text.innerText = messages[Math.floor(Math.random() * messages.length)];
-  text.style.left = Math.random() * 80 + 10 + "%";
-  text.style.top = Math.random() * 80 + 10 + "%";
-  document.body.appendChild(text);
+let started = false;
+function startRomance() {
+  if (started) return;
+  started = true;
 
-  setTimeout(() => text.remove(), 6000);
-}, 2500);
+  setInterval(() => {
+    const t = document.createElement("div");
+    t.className = "floating-text";
+    t.innerText = messages[Math.floor(Math.random() * messages.length)];
+    t.style.left = Math.random() * 80 + 10 + "%";
+    t.style.top = Math.random() * 80 + 10 + "%";
+    document.body.appendChild(t);
+
+    setTimeout(() => t.remove(), 6000);
+  }, 2200);
+}
+
+document.addEventListener("click", startRomance);
+document.addEventListener("mousemove", startRomance);
+
+// YES → song + popup
+yesBtn.addEventListener("click", async () => {
+  try { await song.play(); } catch(e){}
+  popup.style.display = "flex";
+});
 </script>
 
 </body>
 </html>
-
