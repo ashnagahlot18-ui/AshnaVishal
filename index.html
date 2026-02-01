@@ -15,6 +15,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(to bottom, #ffe6f0, #ffd1dc);
   position: relative;
+  cursor: default;
 }
 h1 {
   color: #c9184a;
@@ -88,7 +89,6 @@ my heart chooses you every single day 💕<br><br>
 Will you be my Valentine?
 </p>
 
-<!-- Your photo -->
 <img src="https://raw.githubusercontent.com/ashnagahlot18-ui/AshnaVishal/main/IMG_3028.jpeg" alt="Me & Vishal ❤️">
 
 <div class="buttons">
@@ -97,31 +97,42 @@ Will you be my Valentine?
 </div>
 
 <script>
-// PLAY AUDIO AFTER FIRST CLICK (works in modern browsers)
+// AUDIO: plays after first interaction (works in all browsers)
 let audio = new Audio('https://raw.githubusercontent.com/ashnagahlot18-ui/AshnaVishal/main/thousand-years.mp3');
 audio.loop = true;
-document.addEventListener('click', function startAudio() {
+document.body.addEventListener('click', function startAudio() {
     audio.play();
-    document.removeEventListener('click', startAudio);
+    document.body.removeEventListener('click', startAudio);
 });
 
-// NO BUTTON: avoids cursor dynamically, stays on screen
+// NO BUTTON: continuously moves away from cursor, never leaves screen
 const noBtn = document.getElementById("no");
+noBtn.style.position = "absolute";
+noBtn.style.left = "50%";
+noBtn.style.top = "50%";
+
 document.addEventListener("mousemove", (e) => {
     const btnRect = noBtn.getBoundingClientRect();
-    const dx = e.clientX - (btnRect.left + btnRect.width / 2);
-    const dy = e.clientY - (btnRect.top + btnRect.height / 2);
-    const distance = Math.sqrt(dx*dx + dy*dy);
+    const cursorX = e.clientX;
+    const cursorY = e.clientY;
+    const btnX = btnRect.left + btnRect.width / 2;
+    const btnY = btnRect.top + btnRect.height / 2;
 
-    if(distance < 100) { // triggers when cursor is close
-        let newX = btnRect.left - dx / 1.5;
-        let newY = btnRect.top - dy / 1.5;
+    let dx = btnX - cursorX;
+    let dy = btnY - cursorY;
+    let distance = Math.sqrt(dx*dx + dy*dy);
+
+    if(distance < 120) { // triggers when cursor gets close
+        let moveX = dx / distance * 120; // scale movement
+        let moveY = dy / distance * 120;
+
+        let newX = btnRect.left + moveX;
+        let newY = btnRect.top + moveY;
 
         // keep inside viewport
         newX = Math.max(0, Math.min(window.innerWidth - btnRect.width, newX));
         newY = Math.max(0, Math.min(window.innerHeight - btnRect.height, newY));
 
-        noBtn.style.position = "absolute";
         noBtn.style.left = newX + "px";
         noBtn.style.top = newY + "px";
     }
@@ -130,44 +141,44 @@ document.addEventListener("mousemove", (e) => {
 // YES BUTTON CLICK
 const yesBtn = document.getElementById("yes");
 yesBtn.addEventListener("click", () => {
-  document.body.innerHTML = `
-    <h1>YAYYY 🥹💘</h1>
-    <p>
-      I knew you’d say yes 💕<br><br>
-      Thank you for being my safe place,<br>
-      my biggest support,<br>
-      and my forever Valentine ❤️<br><br>
-      No matter the distance, it’s always you.
-    </p>
-  `;
+    document.body.innerHTML = `
+        <h1>YAYYY 🥹💘</h1>
+        <p>
+        I knew you’d say yes 💕<br><br>
+        Thank you for being my safe place,<br>
+        my biggest support,<br>
+        and my forever Valentine ❤️<br><br>
+        No matter the distance, it’s always you.
+        </p>
+    `;
 
-  // Heart explosion
-  for(let i=0;i<50;i++){
-    const heart = document.createElement("div");
-    heart.classList.add("love-heart");
-    heart.style.left = (window.innerWidth/2) + "px";
-    heart.style.top = (window.innerHeight/2) + "px";
-    heart.style.setProperty('--x', (Math.random()*400-200)+'px');
-    heart.style.setProperty('--y', (Math.random()*400-200)+'px');
-    heart.innerText = "💖";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 1000);
-  }
+    // Heart explosion
+    for(let i=0;i<50;i++){
+        const heart = document.createElement("div");
+        heart.classList.add("love-heart");
+        heart.style.left = (window.innerWidth/2) + "px";
+        heart.style.top = (window.innerHeight/2) + "px";
+        heart.style.setProperty('--x', (Math.random()*400-200)+'px');
+        heart.style.setProperty('--y', (Math.random()*400-200)+'px');
+        heart.innerText = "💖";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+    }
 
-  // Show "I Will Always Love You" popup AFTER YES
-  setTimeout(() => alert("I Will Always Love You ❤️"), 1000);
+    // Show "I Will Always Love You" popup AFTER YES
+    setTimeout(() => alert("I Will Always Love You ❤️"), 1000);
 });
 
-// Floating hearts background
+// Floating hearts in background
 function createHeart() {
-  const heart = document.createElement("div");
-  heart.classList.add("heart");
-  heart.innerHTML = "💗";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 15 + "px";
-  heart.style.animationDuration = Math.random() * 3 + 4 + "s";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 7000);
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💗";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 15 + "px";
+    heart.style.animationDuration = Math.random() * 3 + 4 + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 7000);
 }
 setInterval(createHeart, 300);
 </script>
